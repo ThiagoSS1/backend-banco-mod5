@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
     "dev:debug": "ts-node-dev --inspect=0.0.0.0:9229 src/server.ts",
-    "build": "npx rimraf dist && npx tsc && yarn typeorm migration:run",
+    "build": "npx rimraf dist && npx tsc && yarn migration:run",
     "migration:run": "ts-node-dev ./node_modules/typeorm/cli.js migration:run",
     "migration:show": "ts-node-dev ./node_modules/typeorm/cli.js migration:show"
   },
