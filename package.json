@@ -8,9 +8,10 @@
   },
   "scripts": {
     "start": "node ./dist/server.js",
+    "build": "npx rimraf dist && npx tsc && yarn typeorm migration:run",
     "dev": "ts-node-dev src/server.ts",
     "dev:debug": "ts-node-dev --inspect=0.0.0.0:9229 src/server.ts",
-    "build": "npx rimraf dist && npx tsc && yarn run migration:run",
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node-dev ./node_modules/typeorm/cli.js migration:run",
     "migration:show": "ts-node-dev ./node_modules/typeorm/cli.js migration:show"
   },
