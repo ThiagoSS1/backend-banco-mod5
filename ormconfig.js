@@ -1,5 +1,9 @@
 require('dotenv').config();
 
+const isProduction = process.env.NODE_ENV?.toLocaleLowerCase() === 'production';
+const rootDir = isProduction ? 'dist' : 'src'; 
+
+
 module.exports = {
     type: 'postgres',
     url: process.env.DATABASE_URL,
@@ -7,10 +11,10 @@ module.exports = {
     synchronize: false,
     logging: false,
     entities: [
-        'dist/core/infra/data/database/entities/**/*'
+        rootDir + '/core/infra/data/database/entities/**/*'
     ],
     migrations : [
-        'dist/core/infra/data/database/migrations/**/*'
+       rootDir + '/core/infra/data/database/migrations/**/*'
     ],
     cli: {
         entitiesDir: 'src/core/infra/data/database/entities',

@@ -16,6 +16,12 @@ export class UserRepository {
             name: data.name,
             password: data.password,
         });
+    
+        const verificaNome = await UserEntity.findOne({
+            where: { name: data.name },
+          });
+          if (verificaNome) throw new Error("ALREADY_EXIST_USER_ERROR");
+      
 
         await userEntity.save();
 
@@ -23,32 +29,26 @@ export class UserRepository {
     }
 
 
-    async getUser(uid: string): Promise<User | undefined> {
+    async getUser(): Promise<UserEntity[] | undefined> {
 
-        const userEntity = await UserEntity.findOne(uid);
+        const userEntity = await UserEntity.find();
 
-        if (!userEntity) return undefined;
+        if (userEntity.length === 0) return undefined;
 
-        return this.mapperFromEntityToModel(userEntity);
+        return userEntity;
     }
 
     async login(data: UserParams): Promise<User | undefined> {
 
-        const userEntity = await UserEntity.create({
-            name: data.name,
-            password: data.password,
-
-        });
-
-        const verifyName = await UserEntity.findOne({
+    
+        const user = await UserEntity.findOne({
             where: { name: data.name}
         })
 
-        if (verifyName) throw new Error("Usuário já existe");
+        if (!user) return undefined;
 
-        if (!userEntity) return undefined;
-
-        return this.mapperFromEntityToModel(userEntity);
+    
+        return this.mapperFromEntityToModel(user);
     }
 
     private mapperFromEntityToModel(entity: UserEntity): User {
@@ -56,7 +56,7 @@ export class UserRepository {
             uid: entity.uid,
             name: entity.name,
             password: entity.password,
-
+            
         }
     }
 

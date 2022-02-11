@@ -9,7 +9,9 @@ export class CreateMessageController implements Controller {
         try {
             const repository = new MessageRepository();
 
-            const message = await repository.createMessage(req.body);
+            const { uid_user } = req.params;
+
+            const message = await repository.createMessage({ uid_user, ...req.body});
 
             if (!message) console.error("Mensagem não encontrada");
 

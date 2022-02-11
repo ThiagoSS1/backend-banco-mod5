@@ -7,7 +7,7 @@ export class GetOneMessageController implements Controller {
     async handle(req: Request, res: Response) {
         try {
             const { uid } = req.params;
-
+            console.log(uid)
             const repository = new MessageRepository();
 
             const message = await repository.getMessage(uid);

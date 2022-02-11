@@ -8,14 +8,14 @@ export class LoginUserController implements Controller {
             
             const repository = new UserRepository();
 
-            const users = await repository.login(req.body);
-            console.log(users);
+            const user = await repository.login(req.body);
+            console.log(user);
 
-            if (!users) return res.status(401).json({ error: 'Usuário não encontrado' });
+            if (!user) return res.status(401).json({ error: 'Usuário não encontrado' });
 
-            if (users.password !== req.body.password) return res.status(401).json({ error: 'Senha incorreta' });
+            if (user.password !== req.body.password) return res.status(401).json({ error: 'Senha incorreta' });
 
-            return ok(res, users)
+            return ok(res, user);
         } catch (err: any) {
             return serverError(res, err)
         }

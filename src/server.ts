@@ -7,7 +7,7 @@ new Database()
   .then(() => {
     const app = new App();
     app.init();
-    app.start(process.env.PORT || "3333");
+    app.start(process.env.PORT || "8080");
   })
   .catch((err) => {
     console.log(err);

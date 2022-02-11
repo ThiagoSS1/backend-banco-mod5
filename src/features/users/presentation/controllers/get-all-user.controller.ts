@@ -5,15 +5,13 @@ import { UserRepository } from "../../infra/repositories/UserRepository";
 
 
 
-export class GetOneUserController implements Controller {
+export class GetAllUserController implements Controller {
     async handle(req: Request, res: Response): Promise<any> {
         try {
 
             const repository = new UserRepository();
 
-            const { uid } = req.params;
-
-            const user = await repository.getUser(uid);
+            const user = await repository.getUser();
 
             if(!user) return notFound(res)
 

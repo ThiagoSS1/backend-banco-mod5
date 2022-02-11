@@ -4,17 +4,18 @@ import { Message } from "../../domain/models/Message";
 
 export interface MessageParams { // Duvidas quais propriedades devem ser passadas para o repositorio?
     uid?: string;
-    uid_user: string;
     title: string;
     description: string;
+    uid_user: string;
 }
 
 export class MessageRepository {
 
-    async createMessage(data: MessageParams): Promise<Message> {
+    async createMessage(data: MessageParams): Promise<Message | undefined> {
         const messageEntity = MessageEntity.create({
             title: data.title,
             description: data.description,
+            uidUser: data.uid_user,
         })
 
         await messageEntity.save();
@@ -23,43 +24,53 @@ export class MessageRepository {
     }
 
     async updateMessage(data: MessageParams): Promise<Message | undefined> {
-        const messageEntity = MessageEntity.findOne(data.uid)
+        const messageEntity = MessageEntity.findOne(data.uid, {
+            where: { uidUser: data.uid_user }
+        })
 
-        if (!messageEntity)  return undefined;
+        if (!messageEntity) return undefined;
 
         const messageUpdated = await MessageEntity.create({
+            uid: data.uid,
             title: data.title,
             description: data.description,
-            uid: data.uid,
+            uidUser: data.uid_user,
         });
-        
+
         await messageUpdated.save();
 
         return this.mapperFromEntityToModel(messageUpdated);
     }
 
-    async getMessage(uid:string): Promise<Message | undefined> {
-        const messageEntity = await MessageEntity.findOne(uid)
+    async getMessage(uid: string): Promise<Message | undefined> {
+        const messageEntity = await MessageEntity.findOne(uid, {
+            select: ["title", "description", "uid"],
+        })
 
-        if (!messageEntity)  return undefined;
+        if (!messageEntity) return undefined;
 
         return this.mapperFromEntityToModel(messageEntity);
     }
 
-    async getMessages(): Promise<Message[]> {
-        const messageEntities = await MessageEntity.find();
+    async getMessages(uid_user: string): Promise<Message[]> {
+        const messageEntities = await MessageEntity.find({
+            where: { uidUser: uid_user },
+        });
 
         return messageEntities.map(messageEntity => this.mapperFromEntityToModel(messageEntity));
     }
 
-    async deleteMessage(uid: string): Promise<Message | undefined> {
-       const messageEntity = await MessageEntity.findOne(uid)
+    async deleteMessage(uid: string, uid_user:string): Promise<Message | undefined> {
+        const messageEntity = await MessageEntity.findOne(uid, {
+           where: { uidUser: uid_user },
+        })
+    
 
-       if (!messageEntity)  return undefined;
+        if (!messageEntity) return undefined;
 
-       await MessageEntity.remove(messageEntity);
+        await MessageEntity.remove(messageEntity);
 
-         return this.mapperFromEntityToModel(messageEntity);
+        return this.mapperFromEntityToModel(messageEntity);
     }
 
     private mapperFromEntityToModel(entity: MessageEntity): Message {

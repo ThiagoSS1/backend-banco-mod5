@@ -7,9 +7,8 @@ export class CreateUserController implements Controller {
     async handle(req: Request, res: Response): Promise<any> {
         try {
             const repository = new UserRepository();
-
+            console.log(repository)
             const user = await repository.createUser(req.body);
-            console.log(user)
             
             if(!user) console.log("Usuário não encontrado");	
 

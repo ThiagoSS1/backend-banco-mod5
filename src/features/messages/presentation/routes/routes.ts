@@ -9,11 +9,11 @@ export default class MessageRoutes {
     public init(): Router {
       const routes = Router();
   
-      routes.post("/messages", new CreateMessageController().handle);
-      routes.put("/messages/:uid", new UpdateMessageController().handle);
-      routes.get("/messages/:uid", new GetOneMessageController().handle);
-      routes.get("/messages", new GetAllMessageController().handle);
-      routes.delete("/messages", new DeleteMessageController().handle);
+      routes.post("/messages/:uid_user", new CreateMessageController().handle);
+      routes.put("/messages/:uid_user/:uid", new UpdateMessageController().handle);
+      routes.get("/message/:uid", new GetOneMessageController().handle);
+      routes.get("/messages/:uid_user", new GetAllMessageController().handle);
+      routes.delete("/messages/:uid_user/:uid", new DeleteMessageController().handle);
   
       return routes;
     }
